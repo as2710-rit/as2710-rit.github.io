@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Replication — Abdul</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .proj-hero { padding: 80px 0 40px; }
+    .proj-hero .tag { display:inline-block; font-size:.75rem; font-weight:600;
+      color:var(--accent); background:var(--accent-soft);
+      padding:4px 10px; border-radius:999px; margin-bottom:16px; }
+    .proj-hero h1 { font-size: 2.4rem; letter-spacing:-0.02em; margin-bottom:12px; }
+    .proj-hero .sub { color: var(--text-soft); font-size:1.05rem; max-width:640px; }
+
+    .pipeline-stage {
+      display:grid; grid-template-columns: 60px 1fr; gap:24px;
+      padding: 30px 0; border-bottom: 1px solid var(--border);
+      align-items:flex-start;
+    }
+    .pipeline-stage:last-of-type { border-bottom:none; }
+    .stage-num {
+      width:48px; height:48px; border-radius:50%;
+      background:var(--accent); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:1.15rem; flex-shrink:0;
+    }
+    .stage-title { font-size:1.15rem; font-weight:700; margin-bottom:6px; letter-spacing:-0.01em; }
+    .stage-desc { color:var(--text-soft); font-size:0.98rem; }
+    .stage-desc code {
+      background:var(--accent-soft); color:var(--accent);
+      padding:1px 6px; border-radius:4px; font-size:.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="../index.html" class="nav-brand">← Abdul</a>
+      <div class="nav-links">
+        <a href="../index.html#about">About</a>
+        <a href="../index.html#projects">Projects</a>
+        <a href="../index.html#contact" class="nav-cta">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="proj-hero">
+    <div class="container">
+      <span class="tag">Deep Learning · Audio</span>
+      <h1>Voice Replication (XTTS v2)</h1>
+      <p class="sub">High-fidelity neural voice cloning on consumer GPU hardware,
+        gated by speaker verification so the clone answers only to its owner.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" style="padding-top: 20px;">
+      <div class="container">
+
+        <h2 class="section-title">The approach</h2>
+
+        <div class="pipeline-stage">
+          <div class="stage-num">1</div>
+          <div>
+            <div class="stage-title">Dataset prep</div>
+            <div class="stage-desc">
+              Clean mono WAV clips of the target speaker, loudness-normalized,
+              silence-trimmed, with aligned transcripts.
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-num">2</div>
+          <div>
+            <div class="stage-title">Fine-tune Coqui XTTS v2</div>
+            <div class="stage-desc">
+              GPT-based multilingual TTS conditioned on a speaker embedding —
+              fine-tuned on the prepared clips so the model locks onto the
+              target voice.
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-num">3</div>
+          <div>
+            <div class="stage-title">Speaker verification gate</div>
+            <div class="stage-desc">
+              Before synthesis, an MFCC <em>d-vector</em> verifier compares
+              the requester's voice to the enrolled embedding. Only cosine
+              similarity above threshold allows generation — the clone answers
+              only to its owner.
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-num">4</div>
+          <div>
+            <div class="stage-title">Whisper grounding</div>
+            <div class="stage-desc">
+              Whisper transcribes incoming audio requests, keeping the whole
+              loop text-tractable and auditable.
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-num">5</div>
+          <div>
+            <div class="stage-title">Serving</div>
+            <div class="stage-desc">
+              Realtime synthesis served behind a verification gateway,
+              running on a single RTX-class GPU.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> Abdul · Rochester, NY</span>
+      <span><a href="../index.html#projects">← All projects</a></span>
+    </div>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

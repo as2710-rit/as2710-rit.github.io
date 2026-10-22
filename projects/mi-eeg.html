@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MI-EEG Classification — Abdul</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .proj-hero { padding: 80px 0 40px; }
+    .proj-hero .tag { display:inline-block; font-size:.75rem; font-weight:600;
+      color:var(--accent); background:var(--accent-soft);
+      padding:4px 10px; border-radius:999px; margin-bottom:16px; }
+    .proj-hero h1 { font-size: 2.4rem; letter-spacing:-0.02em; margin-bottom:12px; }
+    .proj-hero .sub { color: var(--text-soft); font-size:1.05rem; max-width:640px; }
+
+    .pipeline-stage {
+      display:grid; grid-template-columns: 60px 1fr; gap:24px;
+      padding: 30px 0; border-bottom: 1px solid var(--border);
+      align-items:flex-start;
+    }
+    .pipeline-stage:last-of-type { border-bottom:none; }
+    .stage-num {
+      width:48px; height:48px; border-radius:50%;
+      background:var(--accent); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:1.15rem; flex-shrink:0;
+    }
+    .stage-title { font-size:1.15rem; font-weight:700; margin-bottom:6px; letter-spacing:-0.01em; }
+    .stage-desc { color:var(--text-soft); font-size:0.98rem; }
+    .stage-desc code {
+      background:var(--accent-soft); color:var(--accent);
+      padding:1px 6px; border-radius:4px; font-size:.85rem;
+    }
+
+    .video-wrap {
+      background:#000; border-radius:var(--radius);
+      overflow:hidden; margin: 32px 0 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.1);
+      aspect-ratio: 16/9;
+    }
+    .video-wrap video { width:100%; height:100%; display:block; }
+    .video-caption { color:var(--text-soft); font-size:.85rem; text-align:center; margin-bottom:32px; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="../index.html" class="nav-brand">← Abdul</a>
+      <div class="nav-links">
+        <a href="../index.html#about">About</a>
+        <a href="../index.html#projects">Projects</a>
+        <a href="../index.html#contact" class="nav-cta">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="proj-hero">
+    <div class="container">
+      <span class="tag">Research · IEEE</span>
+      <h1>Motor-Imagery EEG Classification</h1>
+      <p class="sub">Classifying imagined movements from raw EEG.
+        PSD-driven channel selection, wavelet features across seven bands,
+        XGBoost with subject-specific training.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" style="padding-top: 20px;">
+      <div class="container">
+
+        <h2 class="section-title">The pipeline</h2>
+
+        <div class="video-wrap">
+          <video controls preload="metadata" poster="">
+            <source src="../assets/mi_eeg_pipeline.mp4" type="video/mp4">
+            Your browser doesn't support inline video.
+            <a href="../assets/mi_eeg_pipeline.mp4">Download it instead.</a>
+          </video>
+        </div>
+        <p class="video-caption">The full signal flow, animated end-to-end.</p>
+
+        <div class="pipeline-stage">
+          <div class="stage-num">1</div>
+          <div>
+            <div class="stage-title">Participants &amp; unipolar recording</div>
+            <div class="stage-desc">
+              Multi-electrode scalp EEG is recorded as unipolar channels
+              referenced to a common electrode. Each trace captures a mix
+              of cortical activity, reference noise, and volume conduction.
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-num">2</div>
+          <div>
+            <div class="stage-title">Unipolar → bipolar conversion</div>
+            <div class="stage-desc">
+              Adjacent electrodes are pairwise subtracted to form bipolar
+              derivations, e.g. <code>C3 − Cz</code>. This cancels the
+              shared reference noise and sharpens local cortical signal.
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-num">3</div>
+          <div>
+            <div class="stage-title">PSD per channel pair</div>
+            <div class="stage-desc">
+              Welch's method computes the power spectral density of every
+              bipolar pair across the canonical bands — δ, θ, α, β
+              (low/high), γ (low/high) — giving a 7-band energy profile
+              per pair.
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-num">4</div>
+          <div>
+            <div class="stage-title">Top-10 pair selection</div>
+            <div class="stage-desc">
+              Pairs are ranked by discriminative power (class-conditional
+              band-power separation), and the 10 best are kept — cutting
+              dimensionality while retaining sensorimotor-rich channels.
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-num">5</div>
+          <div>
+            <div class="stage-title">Wavelet feature extraction</div>
+            <div class="stage-desc">
+              Discrete wavelet decomposition on each retained pair,
+              harvesting per-band coefficients (means, energies, standard
+              deviations) — giving a compact time-frequency feature vector.
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-num">6</div>
+          <div>
+            <div class="stage-title">XGBoost classification</div>
+            <div class="stage-desc">
+              A gradient-boosted tree ensemble classifies each trial into
+              its imagined-movement class. Training is subject-specific —
+              one model per participant, tuned on their own trials.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> Abdul · Rochester, NY</span>
+      <span><a href="../index.html#projects">← All projects</a></span>
+    </div>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
