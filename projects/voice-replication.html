@@ -32,6 +32,15 @@
       background:var(--accent-soft); color:var(--accent);
       padding:1px 6px; border-radius:4px; font-size:.85rem;
     }
+
+    .video-wrap {
+      background:#000; border-radius:var(--radius);
+      overflow:hidden; margin: 32px 0 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.1);
+      aspect-ratio: 16/9;
+    }
+    .video-wrap video { width:100%; height:100%; display:block; }
+    .video-caption { color:var(--text-soft); font-size:.85rem; text-align:center; margin-bottom:32px; }
   </style>
 </head>
 <body>
@@ -61,6 +70,15 @@
       <div class="container">
 
         <h2 class="section-title">The approach</h2>
+
+        <div class="video-wrap">
+          <video controls preload="metadata" poster="">
+            <source src="../assets/voice_pipeline.mp4" type="video/mp4">
+            Your browser doesn't support inline video.
+            <a href="../assets/voice_pipeline.mp4">Download it instead.</a>
+          </video>
+        </div>
+        <p class="video-caption">The full pipeline, animated end-to-end.</p>
 
         <div class="pipeline-stage">
           <div class="stage-num">1</div>
