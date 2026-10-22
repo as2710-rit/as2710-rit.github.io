@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abdul — Portfolio</title>
+  <meta name="description" content="Personal portfolio of Abdul, RIT student.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◼</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#top" class="nav-brand">Abdul</a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#resume">Resume</a>
+        <a href="#contact" class="nav-cta">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="container">
+      <p class="hero-kicker">Rochester, NY</p>
+      <h1 class="hero-title">Hi, I'm <span class="accent">Abdul Aleem Shaik Gadda</span>.<br>
+        I build things that listen, learn, and talk.</h1>
+      <p class="hero-sub">Student at RIT working at the intersection of
+        machine learning, brain–computer interfaces, and voice technology.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">View my work</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="section" id="about">
+      <div class="container">
+        <h2 class="section-title">About</h2>
+        <div class="about-grid">
+          <div class="about-text">
+            <p>I'm a PhD student at the Golisano College of Computing and Information Science, Rochester Institute of Technology,
+              focused on applied machine learning for neurological disorders such as epilepsy. Apart from my main research, I work on a variety of ML projects
+              from motor-imagery EEG
+              classification to neural voice cloning. I am learning to ship
+              working systems more than slide decks.</p>
+            <p>When I'm not training models, I'm building the tooling
+              around them: pipelines, evaluation harnesses, and the
+              occasional P2P network.</p>
+          </div>
+          <div class="about-facts">
+            <div class="fact">
+              <span class="fact-label">Based in</span>
+              <span class="fact-value">Rochester, NY</span>
+            </div>
+            <div class="fact">
+              <span class="fact-label">School</span>
+              <span class="fact-value">RIT</span>
+            </div>
+            <div class="fact">
+              <span class="fact-label">Interests</span>
+              <span class="fact-value">BCI · AI · Networking</span>
+            </div>
+            <div class="fact">
+              <span class="fact-label">Open to</span>
+              <span class="fact-value">Research &amp; internships</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="projects">
+      <div class="container">
+        <h2 class="section-title">Selected Projects</h2>
+
+        <div class="card-grid">
+
+          <article class="card">
+            <div class="card-tag">Research · IEEE</div>
+            <h3 class="card-title">Motor-Imagery EEG Classification</h3>
+            <p class="card-body">
+              Classifying imagined limb movements from raw EEG. The pipeline
+              selects channels via power-spectral-density analysis, extracts
+              Wavelet features across seven frequency bands, and trains an
+              XGBoost classifier with subject-specific training — built
+              toward an IEEE-style publication on BCIs.
+            </p>
+            <div class="card-tech">
+              <span>Python</span><span>PSD</span><span>Wavelet</span>
+              <span>XGBoost</span><span>MOABB</span>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-tag">Deep Learning · Audio</div>
+            <h3 class="card-title">Voice Replication (XTTS v2)</h3>
+            <p class="card-body">
+              Fine-tuned Coqui's XTTS v2 for high-fidelity voice cloning on
+              consumer GPU hardware. Covers dataset prep, speaker-encoder
+              verification, and a serving setup for realtime synthesis —
+              including a speaker-verification gate (MFCC d-vectors) so the
+              clone answers only to its owner.
+            </p>
+            <div class="card-tech">
+              <span>PyTorch</span><span>Coqui XTTS</span><span>CUDA</span>
+              <span>Whisper</span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="resume">
+      <div class="container resume-inner">
+        <h2 class="section-title">Resume</h2>
+        <p>Grab a PDF copy of my resume.</p>
+        <a class="btn btn-primary" href="assets/resume.pdf" download>
+          Download resume (PDF)</a>
+        <p class="muted">Drop your file at <code>assets/resume.pdf</code>
+          and this button just works.</p>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="contact">
+      <div class="container">
+        <h2 class="section-title">Contact</h2>
+        <p>Best way to reach me is email — I answer fast.</p>
+        <div class="contact-links">
+          <a class="contact-link" href="mailto:aleem.us.student@gmail.com">
+            <span class="contact-label">Email</span> aleem.us.student@gmail.com</a>
+          <a class="contact-link" href="https://github.com/as2710-rit">
+            <span class="contact-label">GitHub</span> github.com/as2710-rit</a>
+          <a class="contact-link" href="https://www.linkedin.com/in/abdul-aleem-iitbhu">
+            <span class="contact-label">LinkedIn</span> linkedin.com/in/abdul-aleem-iitbhu</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> Abdul · Rochester, NY</span>
+      <span>Built with plain HTML &amp; CSS ·
+        <a href="https://pages.github.com">GitHub Pages</a></span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
