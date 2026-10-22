@@ -41,6 +41,112 @@
     }
     .video-wrap video { width:100%; height:100%; display:block; }
     .video-caption { color:var(--text-soft); font-size:.85rem; text-align:center; margin-bottom:32px; }
+
+    /* ---- interactive PSD sandbox ------------------------------ */
+    .demo-section {
+      background: linear-gradient(180deg, #fafbfc 0%, #fff 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      margin: 48px 0;
+    }
+    .demo-header { margin-bottom: 28px; }
+    .demo-tag { display:inline-block; font-size:.7rem; font-weight:700;
+      letter-spacing:.08em; text-transform:uppercase;
+      color:var(--accent); background:var(--accent-soft);
+      padding:4px 10px; border-radius:999px; margin-bottom:10px; }
+    .demo-title { font-size:1.5rem; font-weight:700; letter-spacing:-0.01em; margin-bottom:6px; }
+    .demo-sub { color:var(--text-soft); font-size:0.95rem; }
+
+    .sandbox {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 28px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .sandbox-controls { display:flex; flex-direction:column; gap:22px; }
+
+    .control-group label {
+      display:block; font-weight:600; font-size:.85rem;
+      color:var(--text); margin-bottom:8px;
+    }
+    .control-group .hint {
+      font-size: .78rem; color: var(--text-soft); margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .class-pills { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+    .class-pill {
+      padding: 10px 6px; border: 1.5px solid var(--border);
+      border-radius:8px; background:#fff;
+      font-size:.85rem; font-weight:600; color:var(--text);
+      cursor:pointer; transition: all .15s;
+      text-align:center;
+    }
+    .class-pill:hover { border-color:var(--accent); color:var(--accent); }
+    .class-pill.active {
+      background:var(--accent); border-color:var(--accent); color:#fff;
+    }
+
+    .slider-row { display:flex; align-items:center; gap:10px; }
+    .sandbox input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none; appearance: none;
+      height: 6px; border-radius: 3px;
+      background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--fill,50%), #e2e8f0 var(--fill,50%), #e2e8f0 100%);
+      outline: none;
+    }
+    .sandbox input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      border: 2.5px solid #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,.18);
+    }
+    .sandbox input[type="range"]::-moz-range-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      border: 2.5px solid #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,.18);
+    }
+    .slider-value {
+      min-width: 42px; text-align: right;
+      font-size:.85rem; font-weight:600; color:var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sandbox-plot { display:flex; flex-direction:column; min-width:0; }
+    .sandbox-plot canvas {
+      display:block; width:100%; height:280px;
+      background:#fafafa; border-radius:8px;
+    }
+    .plot-legend {
+      display:flex; gap:18px; margin-top:12px; font-size:.8rem;
+      color: var(--text-soft); justify-content:flex-end;
+    }
+    .plot-legend span::before {
+      content:''; display:inline-block;
+      width:14px; height:3px; border-radius:2px;
+      margin-right:6px; vertical-align:middle;
+    }
+    .legend-rest::before { background: #94a3b8; }
+    .legend-active::before { background: var(--accent); }
+
+    .demo-note {
+      margin-top:20px; font-size:0.88rem; color:var(--text-soft);
+      padding:12px 16px; background:var(--accent-soft);
+      border-left:3px solid var(--accent);
+      border-radius:0 8px 8px 0;
+    }
+    .demo-note strong { color:var(--text); }
+
+    @media (max-width: 720px) {
+      .sandbox { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -80,6 +186,63 @@
           </video>
         </div>
         <p class="video-caption">The full signal flow, animated end-to-end.</p>
+
+        <section class="demo-section">
+          <div class="demo-header">
+            <span class="demo-tag">Try it</span>
+            <h3 class="demo-title">Tweak a synthetic PSD</h3>
+            <p class="demo-sub">Pick an imagined movement and drag the sliders.
+              Watch the class-conditional PSD separate across δ, θ, α, β bands —
+              that's exactly what the pipeline uses to pick top pairs.</p>
+          </div>
+
+          <div class="sandbox">
+            <div class="sandbox-controls">
+              <div class="control-group">
+                <label>Imagined movement</label>
+                <div class="class-pills">
+                  <button class="class-pill active" data-cls="left">Left hand</button>
+                  <button class="class-pill" data-cls="right">Right hand</button>
+                  <button class="class-pill" data-cls="feet">Feet</button>
+                  <button class="class-pill" data-cls="tongue">Tongue</button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label>Alpha-band power (μ-rhythm suppression)</label>
+                <div class="slider-row">
+                  <input type="range" id="alphaSlider" min="0" max="100" value="60">
+                  <span class="slider-value" id="alphaVal">0.60</span>
+                </div>
+                <div class="hint">Motor imagery suppresses μ (8–13 Hz) over the motor cortex.</div>
+              </div>
+
+              <div class="control-group">
+                <label>Noise level</label>
+                <div class="slider-row">
+                  <input type="range" id="noiseSlider" min="0" max="100" value="30">
+                  <span class="slider-value" id="noiseVal">0.30</span>
+                </div>
+                <div class="hint">Real EEG is noisy — turn it up to see why averaging matters.</div>
+              </div>
+            </div>
+
+            <div class="sandbox-plot">
+              <canvas id="psdCanvas"></canvas>
+              <div class="plot-legend">
+                <span class="legend-rest">Rest</span>
+                <span class="legend-active">Imagined movement</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            <strong>What's happening:</strong> each imagined-movement class
+            suppresses a distinct μ-band signature. The actual pipeline scores
+            every bipolar pair by this class-conditioning gap and keeps the
+            top-10 most discriminative ones.
+          </p>
+        </section>
 
         <div class="pipeline-stage">
           <div class="stage-num">1</div>
@@ -165,6 +328,196 @@
     </div>
   </footer>
 
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ---- PSD sandbox ----------------------------------------------
+    (function () {
+      const canvas = document.getElementById('psdCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const alphaSlider = document.getElementById('alphaSlider');
+      const noiseSlider = document.getElementById('noiseSlider');
+      const alphaVal = document.getElementById('alphaVal');
+      const noiseVal = document.getElementById('noiseVal');
+      const pills = document.querySelectorAll('.class-pill');
+
+      let state = {
+        cls: 'left',
+        alpha: 0.6,
+        noise: 0.3,
+      };
+
+      // frequency band helper: gaussian bump on a 1-45 Hz axis
+      function gauss(f, mu, sigma) {
+        const z = (f - mu) / sigma;
+        return Math.exp(-0.5 * z * z);
+      }
+
+      // Rest PSD baseline: 1/f-ish with a small alpha hump at 10 Hz
+      function restPSD(f) {
+        const baseline = 1.0 / Math.pow(f, 1.2);
+        const alphaHump = 0.30 * gauss(f, 10, 1.5);
+        return baseline + alphaHump;
+      }
+
+      // Active PSD: rest minus class-specific mu suppression + beta rebound
+      function activePSD(f, cls, alphaPow) {
+        const base = restPSD(f);
+        // mu suppression around 10 Hz, scaled by slider
+        let muW;
+        switch (cls) {
+          case 'left':   muW = 1.00; break;  // C4 (right motor)
+          case 'right':  muW = 1.00; break;  // C3 (left motor)
+          case 'feet':   muW = 0.55; break;  // midline Cz — weaker but wider
+          case 'tongue': muW = 0.35; break;  // less alpha, more broad
+          default:       muW = 0.8;
+        }
+        // dip center
+        const dipCenter = (cls === 'tongue') ? 12 : 10;
+        const dipWidth  = (cls === 'feet') ? 2.2 : 1.6;
+        const dip = alphaPow * muW * 0.45 * gauss(f, dipCenter, dipWidth);
+        // beta rebound ~ 20 Hz, modest
+        const beta = alphaPow * 0.20 * gauss(f, 20, 2.5);
+        return Math.max(0.001, base - dip + beta);
+      }
+
+      // seeded pseudo-random noise for stable rendering
+      function noiseAt(i, level) {
+        const s = Math.sin(i * 12.9898 + level * 78.233) * 43758.5453;
+        return (s - Math.floor(s)) * 2 - 1;  // -1..1
+      }
+
+      function withNoise(v, i, n) {
+        return v * (1 + n * 0.35 * noiseAt(i, 1));
+      }
+
+      function drawPSD() {
+        const dpr = window.devicePixelRatio || 1;
+        const W = canvas.clientWidth, H = canvas.clientHeight;
+        canvas.width = W * dpr; canvas.height = H * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, W, H);
+
+        const fMin = 1, fMax = 45;
+        // use log-x so alpha region reads well
+        const logMin = Math.log10(fMin), logMax = Math.log10(fMax);
+        const N = 220;
+        const padL = 50, padR = 20, padT = 18, padB = 38;
+        const plotW = W - padL - padR, plotH = H - padT - padB;
+
+        // gather
+        const rest = [], act = [];
+        for (let i = 0; i <= N; i++) {
+          const t = i / N;
+          const f = Math.pow(10, logMin + t * (logMax - logMin));
+          rest.push([f, withNoise(restPSD(f), i, state.noise * 0.3)]);
+          act.push([f, withNoise(activePSD(f, state.cls, state.alpha), i + 999, state.noise)]);
+        }
+        // find max for y scale
+        let maxY = 0;
+        for (const [,v] of rest) maxY = Math.max(maxY, v);
+        for (const [,v] of act) maxY = Math.max(maxY, v);
+        maxY *= 1.15;
+
+        const xOf = f => padL + (Math.log10(f) - logMin) / (logMax - logMin) * plotW;
+        const yOf = v => padT + plotH - (v / maxY) * plotH;
+
+        // axes
+        ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + plotH); ctx.lineTo(padL + plotW, padT + plotH);
+        ctx.stroke();
+
+        // band shading for alpha (8-13 Hz) and beta-low (13-20 Hz)
+        const alphaF1 = 8, alphaF2 = 13;
+        ctx.fillStyle = 'rgba(59,130,246,0.07)';
+        ctx.fillRect(xOf(alphaF1), padT, xOf(alphaF2) - xOf(alphaF1), plotH);
+        // band label
+        ctx.fillStyle = '#64748b'; ctx.font = '11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('α / μ (8–13 Hz)', (xOf(alphaF1) + xOf(alphaF2)) / 2, padT + 12);
+
+        // x-axis ticks
+        ctx.fillStyle = '#64748b'; ctx.textAlign = 'center';
+        [1, 2, 4, 8, 13, 20, 30, 45].forEach(f => {
+          ctx.fillText(f + (f === 45 ? ' Hz' : ''), xOf(f), padT + plotH + 18);
+          ctx.strokeStyle = '#e2e8f0';
+          ctx.beginPath();
+          ctx.moveTo(xOf(f), padT); ctx.lineTo(xOf(f), padT + plotH);
+          ctx.stroke();
+        });
+
+        // y-labels (just relative power, ticks 0, max/2, max)
+        ctx.textAlign = 'right';
+        for (let k = 0; k <= 2; k++) {
+          const v = (maxY * k / 2);
+          ctx.fillText(v.toFixed(2), padL - 6, yOf(v) + 3);
+        }
+        ctx.save();
+        ctx.translate(12, padT + plotH / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#64748b';
+        ctx.fillText('relative power', 0, 0);
+        ctx.restore();
+
+        // curves
+        function plotLine(data, color, width) {
+          ctx.strokeStyle = color; ctx.lineWidth = width;
+          ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+          ctx.beginPath();
+          data.forEach(([f, v], i) => {
+            const x = xOf(f), y = yOf(v);
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          });
+          ctx.stroke();
+        }
+        plotLine(rest, '#94a3b8', 1.8);
+        plotLine(act, '#3b82f6', 2.4);
+
+        // fill area under active curve
+        ctx.fillStyle = 'rgba(59,130,246,0.12)';
+        ctx.beginPath();
+        act.forEach(([f, v], i) => {
+          const x = xOf(f), y = yOf(v);
+          if (i === 0) ctx.moveTo(x, padT + plotH); // start at baseline
+          ctx.lineTo(x, y);
+        });
+        ctx.lineTo(xOf(act[act.length - 1][0]), padT + plotH);
+        ctx.closePath();
+        ctx.fill();
+        // redraw the active line on top of the fill
+        plotLine(act, getComputedStyle(document.documentElement)
+          .getPropertyValue('--accent').trim() || '#3b82f6', 2.4);
+      }
+
+      function updateUI() {
+        alphaVal.textContent = state.alpha.toFixed(2);
+        noiseVal.textContent = state.noise.toFixed(2);
+        alphaSlider.style.setProperty('--fill', (state.alpha * 100) + '%');
+        noiseSlider.style.setProperty('--fill', (state.noise * 100) + '%');
+        drawPSD();
+      }
+
+      alphaSlider.addEventListener('input', e => {
+        state.alpha = e.target.value / 100; updateUI();
+      });
+      noiseSlider.addEventListener('input', e => {
+        state.noise = e.target.value / 100; updateUI();
+      });
+      pills.forEach(p => {
+        p.addEventListener('click', () => {
+          pills.forEach(q => q.classList.remove('active'));
+          p.classList.add('active');
+          state.cls = p.dataset.cls;
+          updateUI();
+        });
+      });
+      window.addEventListener('resize', drawPSD);
+      updateUI();
+    })();
+  </script>
 </body>
 </html>
