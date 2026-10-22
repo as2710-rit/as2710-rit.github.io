@@ -41,6 +41,60 @@
     }
     .video-wrap video { width:100%; height:100%; display:block; }
     .video-caption { color:var(--text-soft); font-size:.85rem; text-align:center; margin-bottom:32px; }
+
+    /* ---- interactive audio player ------------------------------ */
+    .demo-section {
+      background: linear-gradient(180deg, #fafbfc 0%, #fff 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      margin: 48px 0;
+    }
+    .demo-header { margin-bottom: 24px; }
+    .demo-tag { display:inline-block; font-size:.7rem; font-weight:700;
+      letter-spacing:.08em; text-transform:uppercase;
+      color:var(--accent); background:var(--accent-soft);
+      padding:4px 10px; border-radius:999px; margin-bottom:10px; }
+    .demo-title { font-size:1.5rem; font-weight:700; letter-spacing:-0.01em; margin-bottom:6px; }
+    .demo-sub { color:var(--text-soft); font-size:0.95rem; }
+
+    .voice-player {
+      display:flex; align-items:center; gap:18px;
+      background:#fff; border:1px solid var(--border);
+      border-radius:12px; padding:18px 20px;
+    }
+    .play-btn {
+      width:56px; height:56px; border-radius:50%; flex-shrink:0;
+      background:var(--accent); color:#fff; border:0; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 4px 14px rgba(59,130,246,0.35);
+    }
+    .play-btn:hover { transform: scale(1.05); box-shadow: 0 6px 18px rgba(59,130,246,0.45); }
+    .play-btn:active { transform: scale(0.97); }
+    .play-btn svg { width:20px; height:20px; fill:currentColor; }
+    .play-btn .icon-pause { display:none; }
+    .play-btn.playing .icon-play { display:none; }
+    .play-btn.playing .icon-pause { display:block; }
+
+    .waveform-wrap { flex:1; min-width:0; }
+    .waveform {
+      display:block; width:100%; height:64px;
+      cursor:pointer; border-radius:6px;
+    }
+    .player-meta {
+      display:flex; justify-content:space-between; align-items:baseline;
+      margin-top:8px; font-size:0.82rem; color:var(--text-soft);
+      font-variant-numeric: tabular-nums;
+    }
+    .player-meta .meta-label { font-weight:600; color:var(--text); }
+    .demo-note {
+      margin-top:20px; font-size:0.88rem; color:var(--text-soft);
+      padding:12px 16px; background:var(--accent-soft);
+      border-left:3px solid var(--accent);
+      border-radius:0 8px 8px 0;
+    }
+    .demo-note strong { color:var(--text); }
   </style>
 </head>
 <body>
@@ -79,6 +133,34 @@
           </video>
         </div>
         <p class="video-caption">The full pipeline, animated end-to-end.</p>
+
+        <section class="demo-section">
+          <div class="demo-header">
+            <span class="demo-tag">Try it</span>
+            <h3 class="demo-title">Hear the clone</h3>
+            <p class="demo-sub">An actual sample produced by the fine-tuned model.
+              Play it, scrub the waveform, watch the bars move with the audio.</p>
+          </div>
+
+          <div class="voice-player">
+            <button class="play-btn" id="playBtn" aria-label="Play sample">
+              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+            </button>
+            <div class="waveform-wrap">
+              <canvas class="waveform" id="waveCanvas"></canvas>
+              <div class="player-meta">
+                <span class="meta-label">sample_out.wav</span>
+                <span><span id="tCur">0:00</span> / <span id="tDur">0:00</span></span>
+              </div>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            <strong>Note:</strong> this clip is gated by speaker verification — only
+            my own voice can trigger synthesis. Drag on the waveform to seek.
+          </p>
+        </section>
 
         <div class="pipeline-stage">
           <div class="stage-num">1</div>
@@ -149,6 +231,153 @@
     </div>
   </footer>
 
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ---- voice player -----------------------------------------------
+    (function () {
+      const SRC = '../assets/sample_out.wav';
+      const audio = new Audio(SRC);
+      audio.preload = 'metadata';
+
+      const playBtn = document.getElementById('playBtn');
+      const canvas = document.getElementById('waveCanvas');
+      const tCur = document.getElementById('tCur');
+      const tDur = document.getElementById('tDur');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let peaks = null;      // normalized samples for drawing
+      let duration = 0;
+      let rafId = null;
+
+      function fmt(t) {
+        if (!isFinite(t)) return '0:00';
+        const m = Math.floor(t / 60), s = Math.floor(t % 60);
+        return `${m}:${String(s).padStart(2, '0')}`;
+      }
+
+      function fitCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        const { clientWidth: w, clientHeight: h } = canvas;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      async function loadPeaks() {
+        try {
+          const res = await fetch(SRC);
+          const buf = await res.arrayBuffer();
+          const AC = window.AudioContext || window.webkitAudioContext;
+          const ac = new AC();
+          const decoded = await ac.decodeAudioData(buf);
+          const ch = decoded.getChannelData(0);
+          duration = decoded.duration;
+          tDur.textContent = fmt(duration);
+          const target = 220;  // bars
+          const step = Math.floor(ch.length / target);
+          peaks = new Float32Array(target);
+          for (let i = 0; i < target; i++) {
+            let a = 0;
+            const start = i * step, end = Math.min(start + step, ch.length);
+            for (let j = start; j < end; j += 8) {
+              const v = Math.abs(ch[j]);
+              if (v > a) a = v;
+            }
+            peaks[i] = a;
+          }
+          // normalize
+          let mx = 0; for (const v of peaks) mx = Math.max(mx, v);
+          for (let i = 0; i < target; i++) peaks[i] /= mx || 1;
+          draw();
+          ac.close();
+        } catch (e) {
+          console.warn('peaks failed', e);
+        }
+      }
+
+      function draw() {
+        if (!peaks) return;
+        const w = canvas.clientWidth, h = canvas.clientHeight;
+        ctx.clearRect(0, 0, w, h);
+        const n = peaks.length;
+        const barW = w / n * 0.7;
+        const gap = w / n * 0.3;
+        const progress = duration > 0 ? audio.currentTime / duration : 0;
+        const accent = getComputedStyle(document.documentElement)
+          .getPropertyValue('--accent').trim() || '#3b82f6';
+        const idle = '#cbd5e1';
+        for (let i = 0; i < n; i++) {
+          const x = i * (barW + gap);
+          const ph = Math.max(2, peaks[i] * (h - 6));
+          const y = (h - ph) / 2;
+          const frac = i / n;
+          ctx.fillStyle = frac <= progress ? accent : idle;
+          ctx.beginPath();
+          if (ctx.roundRect) {
+            ctx.roundRect(x, y, barW, ph, barW / 2);
+          } else {
+            ctx.rect(x, y, barW, ph);
+          }
+          ctx.fill();
+        }
+      }
+
+      function tick() {
+        tCur.textContent = fmt(audio.currentTime);
+        draw();
+        if (!audio.paused && !audio.ended) {
+          rafId = requestAnimationFrame(tick);
+        } else {
+          playBtn.classList.remove('playing');
+        }
+      }
+
+      playBtn.addEventListener('click', () => {
+        if (audio.paused) {
+          audio.play();
+          playBtn.classList.add('playing');
+          cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(tick);
+        } else {
+          audio.pause();
+        }
+      });
+      audio.addEventListener('ended', () => {
+        playBtn.classList.remove('playing');
+        audio.currentTime = 0;
+        draw();
+        tCur.textContent = '0:00';
+      });
+
+      // click / drag on waveform to seek
+      let scrubbing = false;
+      function seekFromEvent(ev) {
+        if (!duration) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = (ev.touches ? ev.touches[0].clientX : ev.clientX) - rect.left;
+        const frac = Math.max(0, Math.min(1, x / rect.width));
+        audio.currentTime = frac * duration;
+        draw();
+        tCur.textContent = fmt(audio.currentTime);
+      }
+      canvas.addEventListener('pointerdown', (e) => {
+        scrubbing = true;
+        canvas.setPointerCapture(e.pointerId);
+        seekFromEvent(e);
+      });
+      canvas.addEventListener('pointermove', (e) => { if (scrubbing) seekFromEvent(e); });
+      canvas.addEventListener('pointerup', () => { scrubbing = false; });
+
+      window.addEventListener('resize', () => { fitCanvas(); draw(); });
+      fitCanvas();
+      if (audio.readyState >= 1) tDur.textContent = fmt(audio.duration);
+      audio.addEventListener('loadedmetadata', () => {
+        if (!duration) tDur.textContent = fmt(audio.duration);
+      });
+      loadPeaks();
+    })();
+  </script>
 </body>
 </html>

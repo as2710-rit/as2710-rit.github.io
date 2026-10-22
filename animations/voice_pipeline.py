@@ -179,13 +179,12 @@ class VoicePipeline(Scene):
         enc_label.move_to(enc.get_center())
         gpt_label.move_to(gpt.get_center())
 
-        # embedding arrow from speaker encoder to GPT
-        embed_arrow = Arrow(enc.get_top() + UP * 0.0,
-                            gpt.get_bottom() + DOWN * 0.0,
+        # embedding arrow from speaker encoder to GPT — bottom of enc → top of gpt
+        embed_arrow = Arrow(enc.get_bottom(), gpt.get_top(),
                             color=WHITE, buff=0.05, stroke_width=3,
                             max_tip_length_to_length_ratio=0.25)
         embed_label = label("speaker\nembedding", size=13,
-                            color=GREY_B).next_to(embed_arrow, RIGHT, buff=0.15)
+                            color=GREY_B).next_to(embed_arrow, RIGHT, buff=0.12)
 
         # "training" bars
         train_bars = VGroup(*[
@@ -205,12 +204,18 @@ class VoicePipeline(Scene):
         self.play(Write(train_label), run_time=0.5)
         self.wait(2.0)
 
-        stage2_group = VGroup(stack, enc_label, gpt_label,
-                              embed_arrow, embed_label,
-                              train_bars, train_label)
+        # stage 2 stays in place while stage 3 builds to the right
+        stage1_group = VGroup(owner, owner_label, mic, waves, folder,
+                              folder_label, arrow_to_folder, checks)
         self.play(FadeOut(stage1_group), run_time=0.6)
-        self.play(stage2_group.animate.scale(0.78).shift(LEFT * 1.2),
-                  run_time=1.0)
+        # shrink the stage-2 stack so stage 3 has room on the right
+        stage2_stack_group = VGroup(stack, enc_label, gpt_label,
+                                    embed_arrow, embed_label)
+        self.play(
+            FadeOut(VGroup(train_bars, train_label)),
+            stage2_stack_group.animate.scale(0.7).to_corner(UL, buff=1.1).shift(DOWN * 0.7),
+            run_time=1.0,
+        )
 
         # ---- STAGE 3: SPEAKER VERIFICATION --------------------------------
         s3 = caption("Stage 3 · Speaker-verification gate")
@@ -218,44 +223,56 @@ class VoicePipeline(Scene):
         self.play(ReplacementTransform(s2, s3), run_time=0.7)
 
         # incoming voice on the right
-        requester = person_icon(color=WARN, scale=1.2).to_edge(RIGHT, buff=0.8).shift(UP * 0.4)
+        requester = person_icon(color=WARN, scale=1.2)
+        requester.move_to(RIGHT * 4.6 + UP * 0.6)
         req_label = label("incoming\nrequester", size=16).next_to(requester, DOWN, buff=0.3)
         req_wave = waveform(amplitude=0.25, length=1.4, cycles=4, color=WARN)
         req_wave.next_to(requester, LEFT, buff=0.25)
 
-        # d-vector chip in the middle
+        # d-vector chip below center
         dv_box = RoundedRectangle(width=1.8, height=1.0,
                                   corner_radius=0.1, color=ACCENT,
                                   stroke_width=3,
                                   fill_color=ACCENT, fill_opacity=0.08)
         dv_label = label("MFCC\nd-vector", size=17, color=ACCENT,
                          weight=BOLD).move_to(dv_box.get_center())
-        dv_box.move_to(ORIGIN).shift(DOWN * 0.3 + RIGHT * 1.2)
+        dv_box.move_to(ORIGIN + DOWN * 0.5 + RIGHT * 2.0)
 
         # cosine similarity bar
         sim_bar_bg = Rectangle(width=2.4, height=0.3, color=GREY_B,
                                stroke_width=2, fill_opacity=0.2,
                                fill_color=GREY_B)
-        sim_bar_bg.move_to(dv_box.get_center() + DOWN * 1.9)
+        sim_bar_bg.next_to(dv_box, DOWN, buff=0.6)
         sim_bar_fill = Rectangle(width=2.3, height=0.24, color=SECONDARY,
                                  fill_opacity=0.85, stroke_width=0)
         sim_bar_fill.move_to(sim_bar_bg, aligned_edge=LEFT).shift(RIGHT * 0.025)
         sim_label = label("cosine similarity  ≥  θ", size=14,
                           color=SECONDARY).next_to(sim_bar_bg, LEFT, buff=0.2)
 
-        # lock at output
-        lock = lock_icon(color=SECONDARY, scale=1.4).to_edge(LEFT, buff=1.0).shift(DOWN * 0.4)
+        # lock at output, far left
+        lock = lock_icon(color=SECONDARY, scale=1.4)
+        lock.move_to(LEFT * 4.0 + DOWN * 0.6)
         lock_label = label("allow synthesis\n(owner verified)", size=15,
                            color=SECONDARY).next_to(lock, DOWN, buff=0.25)
 
+        # connect requester → d-vector → sim bar with arrows
+        arrow_req_to_dv = Arrow(req_wave.get_left(), dv_box.get_right(),
+                                color=WARN, buff=0.1, stroke_width=2.5,
+                                max_tip_length_to_length_ratio=0.2)
+        arrow_dv_to_sim = Arrow(dv_box.get_bottom(), sim_bar_bg.get_top(),
+                                color=ACCENT, buff=0.1, stroke_width=2.5,
+                                max_tip_length_to_length_ratio=0.3)
+
         self.play(FadeIn(requester), Write(req_label), FadeIn(req_wave),
                   run_time=0.8)
+        self.play(GrowArrow(arrow_req_to_dv), run_time=0.5)
         self.play(GrowFromCenter(dv_box), Write(dv_label), run_time=0.8)
-        self.play(Create(sim_bar_bg), run_time=0.5)
+        self.play(GrowArrow(arrow_dv_to_sim), run_time=0.4)
+        self.play(Create(sim_bar_bg), run_time=0.4)
         self.play(GrowFromEdge(sim_bar_fill, LEFT), Write(sim_label),
                   run_time=1.0)
         self.play(FadeIn(lock), Write(lock_label), run_time=0.8)
-        self.wait(2.4)
+        self.wait(2.0)
 
         # denied flash (different voice gets rejected) — quick beat
         deny_text = label("mismatch → deny", size=15, color=WARN,
@@ -275,10 +292,25 @@ class VoicePipeline(Scene):
         sim_bar_fill = ok_fill
         self.wait(0.5)
 
+        # clear stages 2+3 before stage 4
+        stage3_group = VGroup(requester, req_label, req_wave,
+                              dv_box, dv_label,
+                              arrow_req_to_dv, arrow_dv_to_sim,
+                              sim_bar_bg, sim_bar_fill, sim_label,
+                              lock, lock_label)
+        self.play(FadeOut(stage3_group), FadeOut(stage2_stack_group),
+                  run_time=0.9)
+
         # ---- STAGE 4: WHISPER GROUNDING -----------------------------------
         s4 = caption("Stage 4 · Whisper grounding")
         s4.to_edge(UP, buff=0.6)
         self.play(ReplacementTransform(s3, s4), run_time=0.7)
+
+        # whisper audio wave on the left, ASR box center, transcript on right
+        in_wave = waveform(amplitude=0.28, length=1.6, cycles=4, color=PRIMARY)
+        in_wave.move_to(LEFT * 4.2 + UP * 0.1)
+        in_label = label("voice\nrequest", size=15,
+                         color=GREY_B).next_to(in_wave, DOWN, buff=0.25)
 
         whisper_box = RoundedRectangle(width=2.4, height=1.1,
                                        corner_radius=0.12,
@@ -286,30 +318,34 @@ class VoicePipeline(Scene):
                                        fill_color=PRIMARY, fill_opacity=0.08)
         whisper_label = label("Whisper\nASR", size=20, color=PRIMARY,
                               weight=BOLD).move_to(whisper_box.get_center())
-        whisper_box.move_to(ORIGIN).shift(UP * 0.1)
+        whisper_box.move_to(ORIGIN + UP * 0.1)
+
+        arrow_in_to_w = Arrow(in_wave.get_right(), whisper_box.get_left(),
+                              color=PRIMARY, buff=0.1, stroke_width=3,
+                              max_tip_length_to_length_ratio=0.25)
 
         transcript = label("\"clone my voice\nfor this demo\"", size=17,
-                           color=WHITE).next_to(whisper_box, RIGHT, buff=0.7)
-        quote_mark = label("\\[", size=40, color=GREY_B).next_to(
-            transcript, LEFT, buff=0.0).scale(0.01)  # spacer, removed later
-        quote_mark.set_opacity(0)
-
-        self.play(FadeIn(whisper_box), Write(whisper_label), run_time=0.8)
-        self.play(Write(transcript), FadeIn(quote_mark), run_time=0.9)
+                           color=WHITE).next_to(whisper_box, RIGHT, buff=0.6)
+        arrow_w_to_t = Arrow(whisper_box.get_right(), transcript.get_left(),
+                             color=WHITE, buff=0.15, stroke_width=3,
+                             max_tip_length_to_length_ratio=0.25)
 
         ground_note = label("every request stays text-tractable & auditable",
                             size=14, color=GREY_B).to_edge(DOWN, buff=1.0)
-        self.play(Write(ground_note), run_time=0.7)
-        self.wait(1.6)
 
-        stage3to4_group = VGroup(requester, req_label, req_wave,
-                                 dv_box, dv_label,
-                                 sim_bar_bg, sim_bar_fill, sim_label,
-                                 lock, lock_label,
-                                 whisper_box, whisper_label, transcript,
-                                 ground_note)
-        self.play(FadeOut(stage3to4_group), FadeOut(stage2_group),
-                  run_time=0.9)
+        self.play(FadeIn(in_wave), Write(in_label), run_time=0.7)
+        self.play(GrowArrow(arrow_in_to_w), run_time=0.5)
+        self.play(FadeIn(whisper_box), Write(whisper_label), run_time=0.8)
+        self.play(GrowArrow(arrow_w_to_t), run_time=0.4)
+        self.play(Write(transcript), run_time=0.8)
+        self.play(Write(ground_note), run_time=0.7)
+        self.wait(1.8)
+
+        # clear stage 4 before stage 5
+        stage4_group = VGroup(in_wave, in_label, whisper_box, whisper_label,
+                              arrow_in_to_w, arrow_w_to_t,
+                              transcript, ground_note)
+        self.play(FadeOut(stage4_group), run_time=0.8)
 
         # ---- STAGE 5: SYNTHESIS + SERVING --------------------------------
         s5 = caption("Stage 5 · Synthesis & serving")
