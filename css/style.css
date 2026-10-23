@@ -476,7 +476,13 @@ body {
   .contact-aside { position: static; }
   .contact-form { padding: 26px 22px; }
   .contact-header { padding: 60px 0 40px; }
-  .nav-links { gap: 14px; flex-wrap: wrap; }
+  .nav-inner {
+    height: auto; padding: 12px 0;
+    flex-direction: column; align-items: flex-start; gap: 10px;
+  }
+  .nav-links { width: 100%; justify-content: space-between; gap: 8px; flex-wrap: nowrap; }
+  .nav-links a { font-size: 0.85rem; }
+  .nav-cta { padding: 5px 12px; white-space: nowrap; }
   .hero { padding: 70px 0 60px; }
   .section { padding: 60px 0; }
   .fact-value { text-align: left; }
