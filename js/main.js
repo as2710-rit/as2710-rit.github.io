@@ -6,6 +6,12 @@
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  // Contact form success state (redirected back with ?sent=1)
+  if (window.location.search.indexOf('sent=1') !== -1) {
+    var ok = document.getElementById('form-success');
+    if (ok) ok.hidden = false;
+  }
+
   // Scroll-reveal
   var els = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

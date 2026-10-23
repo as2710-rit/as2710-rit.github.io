@@ -365,6 +365,41 @@ body {
   text-transform: uppercase; letter-spacing: .08em; font-weight: 600;
 }
 
+/* ---------- Inline link ---------- */
+.inline-link { color: var(--accent); font-weight: 600; text-decoration: none; }
+.inline-link:hover { text-decoration: underline; }
+
+/* ---------- Contact form ---------- */
+.contact-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 48px; align-items: start; }
+.contact-form { display: flex; flex-direction: column; gap: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 7px; }
+.form-group label { font-size: 0.9rem; font-weight: 600; }
+.req { color: var(--accent); }
+.opt { color: var(--text-soft); font-weight: 400; font-size: 0.85rem; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  font-family: inherit; font-size: 1rem; color: var(--text);
+  padding: 12px 14px; border: 1px solid var(--border);
+  border-radius: 8px; background: #fff; width: 100%;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.form-group textarea { resize: vertical; min-height: 140px; }
+.contact-form .btn { align-self: flex-start; border: none; cursor: pointer; }
+.hp-field { position: absolute; left: -5000px; }
+.form-note {
+  background: var(--accent-soft); color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 8px;
+  padding: 12px 16px; font-weight: 500;
+}
+.contact-aside { position: sticky; top: 78px; }
+
 /* ---------- Footer ---------- */
 .footer { border-top: 1px solid var(--border); padding: 28px 0; }
 .footer-inner {
@@ -375,7 +410,8 @@ body {
 
 /* ---------- Responsive ---------- */
 @media (max-width: 760px) {
-  .about-grid, .card-grid, .about-extras, .honor-grid, .edu-grid { grid-template-columns: 1fr; }
+  .about-grid, .card-grid, .about-extras, .honor-grid, .edu-grid, .contact-grid { grid-template-columns: 1fr; }
+  .contact-aside { position: static; }
   .nav-links { gap: 14px; flex-wrap: wrap; }
   .hero { padding: 70px 0 60px; }
   .section { padding: 60px 0; }
