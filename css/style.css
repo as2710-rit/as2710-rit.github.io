@@ -442,7 +442,7 @@ body {
 
 /* ---------- Contact aside ---------- */
 .contact-aside { position: sticky; top: 78px; }
-.social-cards { display: flex; flex-direction: column; gap: 14px; margin-top: 18px; }
+.social-cards { display: flex; flex-direction: column; gap: 14px; margin-top: 18px; max-width: 440px; }
 .social-card {
   display: flex; align-items: center; gap: 14px;
   padding: 16px 18px; border: 1px solid var(--border);
