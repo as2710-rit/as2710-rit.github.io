@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abdul — Portfolio</title>
-  <meta name="description" content="Personal portfolio of Abdul, RIT student.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◼</text></svg>">
+  <title>Abdul Aleem Shaik Gadda — Portfolio</title>
+  <meta name="description" content="Abdul Aleem Shaik Gadda — PhD student at RIT working on AI for brain–computer interfaces and neural signal processing.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f76902'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>A</text></svg>">
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <nav class="nav">
     <div class="container nav-inner">
-      <a href="#top" class="nav-brand">Abdul</a>
+      <a href="#top" class="nav-brand">Abdul<span class="accent">.</span></a>
       <div class="nav-links">
         <a href="#about">About</a>
+        <a href="#experience">Experience</a>
         <a href="#projects">Projects</a>
+        <a href="#publications">Publications</a>
         <a href="#resume">Resume</a>
         <a href="#contact" class="nav-cta">Contact</a>
       </div>
@@ -28,14 +30,21 @@
     <div class="container">
       <div class="hero-inner">
         <div class="hero-text">
-          <p class="hero-kicker">Rochester, NY</p>
+          <p class="hero-kicker">PhD Student · Rochester, NY</p>
           <h1 class="hero-title">Hi, I'm <span class="accent">Abdul Aleem Shaik Gadda</span>.<br>
-            I build things that listen, learn, and talk.</h1>
-          <p class="hero-sub">Student at RIT working at the intersection of
-            machine learning, brain–computer interfaces, and voice technology.</p>
+            I build AI that listens to the brain.</h1>
+          <p class="hero-sub">PhD student in Computing &amp; Information Sciences at RIT, applying
+            machine learning to brain–computer interfaces, neural signal processing, and
+            healthcare.</p>
+          <div class="hero-wave" aria-hidden="true">
+            <svg viewBox="0 0 600 60" preserveAspectRatio="none" width="600" height="60">
+              <path class="eeg-base" d="M0,30 L60,30 L70,18 L80,42 L90,22 L100,30 L140,30 L150,14 L160,46 L170,24 L180,30 L220,30 L230,20 L240,40 L250,26 L260,30 L300,30 L310,10 L320,50 L330,20 L340,30 L380,30 L390,16 L400,44 L410,24 L420,30 L460,30 L470,22 L480,38 L490,28 L500,30 L540,30 L550,12 L560,48 L570,22 L580,30 L600,30"/>
+              <path class="eeg-pulse" d="M0,30 L60,30 L70,18 L80,42 L90,22 L100,30 L140,30 L150,14 L160,46 L170,24 L180,30 L220,30 L230,20 L240,40 L250,26 L260,30 L300,30 L310,10 L320,50 L330,20 L340,30 L380,30 L390,16 L400,44 L410,24 L420,30 L460,30 L470,22 L480,38 L490,28 L500,30 L540,30 L550,12 L560,48 L570,22 L580,30 L600,30"/>
+            </svg>
+          </div>
           <div class="hero-actions">
             <a href="#projects" class="btn btn-primary">View my work</a>
-            <a href="#contact" class="btn btn-ghost">Get in touch</a>
+            <a href="assets/resume.pdf" class="btn btn-ghost" download>Download CV</a>
           </div>
         </div>
         <div class="hero-avatar-wrap">
@@ -53,95 +62,257 @@
 
   <main>
 
+    <!-- About -->
     <section class="section" id="about">
       <div class="container">
         <h2 class="section-title">About</h2>
         <div class="about-grid">
           <div class="about-text">
-            <p>I'm a PhD student at the Golisano College of Computing and Information Science, Rochester Institute of Technology,
-              focused on applied machine learning for neurological disorders such as epilepsy. Apart from my main research, I work on a variety of ML projects
-              from motor-imagery EEG
-              classification to neural voice cloning. I am learning to ship
-              working systems more than slide decks.</p>
-            <p>When I'm not training models, I'm building the tooling
-              around them: pipelines, evaluation harnesses, and the
-              occasional P2P network.</p>
+            <p>I'm a first-year PhD student in Computing and Information Sciences at the
+              <strong>Rochester Institute of Technology</strong>, with a background in biomedical
+              engineering from <strong>IIT (BHU) Varanasi</strong>. My research applies artificial
+              intelligence to neurological signals — seizure prediction from EEG, brain–computer
+              interfaces, and neural signal processing — toward monitoring, diagnosis, and
+              rehabilitation.</p>
+            <p>Across internships at the Max Planck Institute, Fidelity, University of Alberta,
+              and KU Leuven, I've worked the full stack of a research problem: acquiring neural
+              data, building pipelines, and deploying models that hold up in the real world.</p>
           </div>
           <div class="about-facts">
-            <div class="fact">
-              <span class="fact-label">Based in</span>
-              <span class="fact-value">Rochester, NY</span>
+            <div class="fact"><span class="fact-label">Program</span><span class="fact-value">PhD, Computing &amp; Info Sciences</span></div>
+            <div class="fact"><span class="fact-label">School</span><span class="fact-value">Rochester Institute of Technology</span></div>
+            <div class="fact"><span class="fact-label">Prior</span><span class="fact-value">IIT (BHU) Varanasi</span></div>
+            <div class="fact"><span class="fact-label">Focus</span><span class="fact-value">AI · BCI · Signal Processing</span></div>
+          </div>
+        </div>
+
+        <div class="about-extras">
+          <div class="extra-block">
+            <h3 class="extra-title">Research Interests</h3>
+            <div class="chip-row">
+              <span class="chip">Artificial Intelligence</span>
+              <span class="chip">Brain–Computer Interfaces</span>
+              <span class="chip">Signal Processing</span>
+              <span class="chip">Neural Robotics</span>
+              <span class="chip">Computational Neuroscience</span>
+              <span class="chip">Cognitive Neuroscience</span>
+              <span class="chip">Biomedical Data Science</span>
+              <span class="chip">Rehabilitation</span>
+              <span class="chip">Assistive Technology</span>
             </div>
-            <div class="fact">
-              <span class="fact-label">School</span>
-              <span class="fact-value">RIT</span>
-            </div>
-            <div class="fact">
-              <span class="fact-label">Interests</span>
-              <span class="fact-value">BCI · AI · Networking</span>
-            </div>
-            <div class="fact">
-              <span class="fact-label">Open to</span>
-              <span class="fact-value">Research &amp; internships</span>
+          </div>
+          <div class="extra-block">
+            <h3 class="extra-title">Skills</h3>
+            <div class="chip-row">
+              <span class="chip">Python</span>
+              <span class="chip">MATLAB</span>
+              <span class="chip">LaTeX</span>
+              <span class="chip">Julia</span>
+              <span class="chip">FreeSurfer</span>
+              <span class="chip">MIPAV</span>
+              <span class="chip">BrainSuite</span>
+              <span class="chip">Confocal Microscopy</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section section-alt" id="projects">
+    <!-- Experience -->
+    <section class="section section-alt" id="experience">
+      <div class="container">
+        <h2 class="section-title">Experience</h2>
+
+        <h3 class="subsection-title">Education</h3>
+        <div class="timeline">
+          <div class="tl-item reveal">
+            <div class="tl-marker"></div>
+            <div class="tl-date">2026 – 2031</div>
+            <div class="tl-body">
+              <h4 class="tl-title">Rochester Institute of Technology</h4>
+              <p class="tl-sub">PhD, Computing and Information Sciences</p>
+            </div>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-marker"></div>
+            <div class="tl-date">2020 – 2025</div>
+            <div class="tl-body">
+              <h4 class="tl-title">Indian Institute of Technology (BHU) Varanasi</h4>
+              <p class="tl-sub">IDD — B.Tech (Bioengineering) + M.Tech (Biomedical Technology) · CGPA 9.65 / 10.00</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">Research &amp; Industry</h3>
+        <div class="timeline">
+          <div class="tl-item reveal">
+            <div class="tl-marker"></div>
+            <div class="tl-date">Dec 2025</div>
+            <div class="tl-body">
+              <h4 class="tl-title">Realtime Word Prediction through EMG Signals</h4>
+              <p class="tl-sub">Project Guide · IIT Kanpur</p>
+              <p class="tl-desc">Guided real-time ML models for word prediction from EMG; developed hybrid
+                deep-learning and statistical models with calibration and regularization to reduce bias.</p>
+            </div>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-marker"></div>
+            <div class="tl-date">Jun 2025 – Jan 2026</div>
+            <div class="tl-body">
+              <h4 class="tl-title">Research Scientist — RoLi Lab</h4>
+              <p class="tl-sub">Max Planck Institute for Biological Cybernetics · Tübingen, Germany</p>
+              <p class="tl-desc">Studied social-cognitive behaviour of larval zebrafish, identifying place-cell
+                vs. sensory-cell activity during spatial memory formation.</p>
+            </div>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-marker"></div>
+            <div class="tl-date">May – Jul 2024</div>
+            <div class="tl-body">
+              <h4 class="tl-title">Research Intern — AI Center of Excellence</h4>
+              <p class="tl-sub">Fidelity Investments · India</p>
+              <p class="tl-desc">Built a covered-call option strategy simulator with LSTM and the Black–Scholes
+                model, surfaced through Streamlit.</p>
+            </div>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-marker"></div>
+            <div class="tl-date">May – Aug 2023</div>
+            <div class="tl-body">
+              <h4 class="tl-title">MITACS Globalink Research Intern</h4>
+              <p class="tl-sub">University of Alberta · Canada</p>
+              <p class="tl-desc">Identified the transfer function of the spinal-cord system converting electrical
+                stimulation into muscle response; a 7th-order model fit with &gt;85% overlap.</p>
+            </div>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-marker"></div>
+            <div class="tl-date">Jan – Sep 2022</div>
+            <div class="tl-body">
+              <h4 class="tl-title">Research Intern</h4>
+              <p class="tl-sub">KU Leuven · Belgium</p>
+              <p class="tl-desc">Studied cognition and memory via frequency-band activity across the N-BACK task,
+                with Dr. Marc Van Hulle.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="section" id="projects">
       <div class="container">
         <h2 class="section-title">Selected Projects</h2>
-
         <div class="card-grid">
 
-          <a class="card card-link" href="projects/mi-eeg.html">
+          <a class="card card-link reveal" href="projects/mi-eeg.html">
             <div class="card-tag">Research · IEEE</div>
             <h3 class="card-title">Motor-Imagery EEG Classification →</h3>
-            <p class="card-body">
-              Classifying imagined limb movements from raw EEG. The pipeline
-              selects channels via power-spectral-density analysis, extracts
-              Wavelet features across seven frequency bands, and trains an
-              XGBoost classifier with subject-specific training — built
-              toward an IEEE-style publication on BCIs.
-            </p>
-            <div class="card-tech">
-              <span>Python</span><span>PSD</span><span>Wavelet</span>
-              <span>XGBoost</span><span>MOABB</span>
-            </div>
+            <p class="card-body">Classifying imagined limb movements from raw EEG — PSD channel
+              selection, Wavelet features across seven bands, and an XGBoost classifier with
+              subject-specific training.</p>
+            <div class="card-tech"><span>Python</span><span>PSD</span><span>Wavelet</span><span>XGBoost</span><span>MOABB</span></div>
           </a>
 
-          <a class="card card-link" href="projects/voice-replication.html">
+          <a class="card card-link reveal" href="projects/voice-replication.html">
             <div class="card-tag">Deep Learning · Audio</div>
             <h3 class="card-title">Voice Replication (XTTS v2) →</h3>
-            <p class="card-body">
-              Fine-tuned Coqui's XTTS v2 for high-fidelity voice cloning on
-              consumer GPU hardware. Covers dataset prep, speaker-encoder
-              verification, and a serving setup for realtime synthesis —
-              including a speaker-verification gate (MFCC d-vectors) so the
-              clone answers only to its owner.
-            </p>
-            <div class="card-tech">
-              <span>PyTorch</span><span>Coqui XTTS</span><span>CUDA</span>
-              <span>Whisper</span>
-            </div>
+            <p class="card-body">Fine-tuned Coqui XTTS v2 for high-fidelity voice cloning, with a
+              speaker-verification gate (MFCC d-vectors) so the clone answers only to its owner.</p>
+            <div class="card-tech"><span>PyTorch</span><span>Coqui XTTS</span><span>CUDA</span><span>Whisper</span></div>
           </a>
+
+          <div class="card reveal">
+            <div class="card-tag">Masters Thesis</div>
+            <h3 class="card-title">Epileptic Seizure Prediction</h3>
+            <p class="card-body">Identified the optimal preictal interval for seizure prediction across
+              TUH and Siena datasets, comparing statistical ML models over multiple feature domains —
+              a 10-minute prediction horizon on CHB-MIT.</p>
+            <div class="card-tech"><span>EEG</span><span>TUH</span><span>Scikit-learn</span><span>Signal Processing</span></div>
+          </div>
+
+          <div class="card reveal">
+            <div class="card-tag">Deep Learning</div>
+            <h3 class="card-title">Emotion Recognition from Physiology</h3>
+            <p class="card-body">Classified emotion (baseline / fun / stress) from WESAD signals using
+              STFT, CWT and MFC time-frequency representations fed into cCNN, VGG16 and AlexNet —
+              85% with VGG16.</p>
+            <div class="card-tech"><span>VGG16</span><span>STFT</span><span>CWT</span><span>WESAD</span></div>
+          </div>
+
+          <div class="card reveal">
+            <div class="card-tag">Neuroimaging</div>
+            <h3 class="card-title">Functional Connectivity Analysis</h3>
+            <p class="card-body">Led a team comparing Mutual Information, R² and Pearson correlation to
+              examine brain-region connectivity, classifying ASD vs. TD with &gt;80% accuracy.</p>
+            <div class="card-tech"><span>Mutual Information</span><span>Correlation</span><span>Classification</span></div>
+          </div>
+
+          <div class="card reveal">
+            <div class="card-tag">Human–Machine Interface</div>
+            <h3 class="card-title">EMG Gesture Mouse Control</h3>
+            <p class="card-body">Real-time mouse clicks from EMG gestures captured with an Arduino UNO,
+              classified with XGBoost and interfaced through Python.</p>
+            <div class="card-tech"><span>EMG</span><span>Arduino</span><span>XGBoost</span><span>Real-time</span></div>
+          </div>
 
         </div>
       </div>
     </section>
 
+    <!-- Publications -->
+    <section class="section section-alt" id="publications">
+      <div class="container">
+        <h2 class="section-title">Publications</h2>
+
+        <h3 class="subsection-title">Journal</h3>
+        <ol class="pub-list">
+          <li class="reveal"><strong>A. Aleem Shaik Gadda</strong>, A. Chahar, Y. Rajamanickam, J. Thomas, and
+            J. Fredo Agastinose Ronickom, "Data-Driven Quantification of the Pre-Seizure Period in Epilepsy
+            Using Scalp EEG: A Causal Observational Study," <em>submitted to</em> IEEE Trans. Neural Syst.
+            Rehabil. Eng.</li>
+          <li class="reveal">P. Sriram Kumar, P. K. Govarthan, <strong>A. Aleem Shaik Gadda</strong>, N. Ganapathy, and
+            J. Fredo Agastinose Ronickom, "Deep Learning-Based Automated Emotion Recognition Using Multimodal
+            Physiological Signals and Time-Frequency Methods," <em>IEEE Trans. Instrum. Meas.</em>, vol. 73, 2024.</li>
+          <li class="reveal">A. Bhattacharya, G. Manoj, V. Gupta, <strong>A. Aleem Shaik Gadda</strong>, D. Vedantham,
+            A. P. A. Prince, P. Rani, A. Ramaniharan, and J. Fredo, "Comparative evaluation of geometrical, Zernike
+            moments, and volumetric features of the corpus callosum for discrimination of ASD using machine
+            learning algorithms," <em>Int. J. Biomed. Eng. Technol.</em>, vol. 43, 2023.</li>
+          <li class="reveal">G. Manoj, V. Gupta, A. Bhattacharya, <strong>A. Aleem Shaik Gadda</strong>, D. Vedantham, and
+            J. F. Agastinose Ronickom, "Diagnostic classification of autism spectrum disorder using sMRI improves
+            with morphological distance-related features," <em>Multimedia Tools Appl.</em>, 2024.</li>
+        </ol>
+
+        <h3 class="subsection-title">Conference</h3>
+        <ol class="pub-list">
+          <li class="reveal"><strong>A. Aleem Shaik Gadda</strong>, D. Vedantham, J. Thomas, Y. Rajamanickam, R. N. Menon, and
+            J. Fredo Agastinose Ronickom, "Optimization of Preictal Interval Time Period for Epileptic Seizure
+            Prediction Using Temporal and Frequency Features," <em>Stud. Health Technol. Inform.</em>, vol. 302, 2023.</li>
+          <li class="reveal">A. Bhattacharya, G. Manoj, V. Gupta, <strong>A. Aleem Shaik Gadda</strong>, A. Prince, P. Rani,
+            and J. Fredo AR, "Evaluation of Zernike moments of corpus callosum for discrimination of autism using
+            Random Forest," XXII ICMMB, Bologna, Italy, 2022 (abstract).</li>
+        </ol>
+
+        <h3 class="subsection-title">Honors &amp; Awards</h3>
+        <div class="honor-grid">
+          <div class="honor reveal"><strong>2nd Winner</strong><span>IEEE SMC 2024 Brain–Computer Interface Hackathon</span></div>
+          <div class="honor reveal"><strong>2nd Position</strong><span>AL-VTOLA, Techfest, IIT Bombay — UAV surveillance design</span></div>
+          <div class="honor reveal"><strong>Top 10 Finalist</strong><span>Hult Prize On-Campus Finals (Team Merci)</span></div>
+          <div class="honor reveal"><strong>Finalist · Team Lead</strong><span>Abhipraya'20, IIT (BHU) Varanasi</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resume -->
     <section class="section" id="resume">
       <div class="container resume-inner">
         <h2 class="section-title">Resume</h2>
-        <p>Grab a PDF copy of my resume.</p>
-        <a class="btn btn-primary" href="assets/resume.pdf" download>
-          Download resume (PDF)</a>
-        <p class="muted">Drop your file at <code>assets/resume.pdf</code>
-          and this button just works.</p>
+        <p>Full CV with complete publication list, presentations, and workshop history.</p>
+        <a class="btn btn-primary" href="assets/resume.pdf" download>Download CV (PDF)</a>
       </div>
     </section>
 
+    <!-- Contact -->
     <section class="section section-alt" id="contact">
       <div class="container">
         <h2 class="section-title">Contact</h2>
@@ -161,7 +332,7 @@
 
   <footer class="footer">
     <div class="container footer-inner">
-      <span>© <span id="year"></span> Abdul · Rochester, NY</span>
+      <span>© <span id="year"></span> Abdul Aleem Shaik Gadda · Rochester, NY</span>
       <span>Built with plain HTML &amp; CSS ·
         <a href="https://pages.github.com">GitHub Pages</a></span>
     </div>
@@ -169,6 +340,21 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Scroll-reveal animation
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        els.forEach(function (el) { el.classList.add('is-visible'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(function (el) { io.observe(el); });
+    })();
   </script>
 </body>
 </html>
