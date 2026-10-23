@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — Abdul Aleem Shaik Gadda</title>
+  <meta name="description" content="Research and engineering projects by Abdul Aleem Shaik Gadda — EEG classification, voice cloning, seizure prediction, and more.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f76902'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>A</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand">Abdul<span class="accent">.</span></a>
+      <div class="nav-links">
+        <a href="index.html#about">About</a>
+        <a href="projects.html" class="nav-current">Projects</a>
+        <a href="experience.html">Experience</a>
+        <a href="index.html#contact" class="nav-cta">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">Projects</h1>
+      <p class="page-sub">A selection of research and engineering work across brain–computer
+        interfaces, signal processing, and deep learning.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="card-grid">
+
+          <a class="card card-link reveal" href="projects/mi-eeg.html">
+            <div class="card-tag">Research · IEEE · Interactive</div>
+            <h3 class="card-title">Motor-Imagery EEG Classification →</h3>
+            <p class="card-body">Classifying imagined limb movements from raw EEG — PSD channel
+              selection, Wavelet features across seven bands, and an XGBoost classifier with
+              subject-specific training.</p>
+            <div class="card-tech"><span>Python</span><span>PSD</span><span>Wavelet</span><span>XGBoost</span><span>MOABB</span></div>
+          </a>
+
+          <a class="card card-link reveal" href="projects/voice-replication.html">
+            <div class="card-tag">Deep Learning · Audio · Interactive</div>
+            <h3 class="card-title">Voice Replication (XTTS v2) →</h3>
+            <p class="card-body">Fine-tuned Coqui XTTS v2 for high-fidelity voice cloning, with a
+              speaker-verification gate (MFCC d-vectors) so the clone answers only to its owner.</p>
+            <div class="card-tech"><span>PyTorch</span><span>Coqui XTTS</span><span>CUDA</span><span>Whisper</span></div>
+          </a>
+
+          <div class="card reveal">
+            <div class="card-tag">Masters Thesis</div>
+            <h3 class="card-title">Epileptic Seizure Prediction</h3>
+            <p class="card-body">Identified the optimal preictal interval for seizure prediction across
+              TUH and Siena datasets, comparing statistical ML models over multiple feature domains —
+              a 10-minute prediction horizon on CHB-MIT.</p>
+            <div class="card-tech"><span>EEG</span><span>TUH</span><span>Scikit-learn</span><span>Signal Processing</span></div>
+          </div>
+
+          <div class="card reveal">
+            <div class="card-tag">Deep Learning</div>
+            <h3 class="card-title">Emotion Recognition from Physiology</h3>
+            <p class="card-body">Classified emotion (baseline / fun / stress) from WESAD signals using
+              STFT, CWT and MFC time-frequency representations fed into cCNN, VGG16 and AlexNet —
+              85% with VGG16.</p>
+            <div class="card-tech"><span>VGG16</span><span>STFT</span><span>CWT</span><span>WESAD</span></div>
+          </div>
+
+          <div class="card reveal">
+            <div class="card-tag">Neuroimaging</div>
+            <h3 class="card-title">Functional Connectivity Analysis</h3>
+            <p class="card-body">Led a team comparing Mutual Information, R² and Pearson correlation to
+              examine brain-region connectivity, classifying ASD vs. TD with &gt;80% accuracy.</p>
+            <div class="card-tech"><span>Mutual Information</span><span>Correlation</span><span>Classification</span></div>
+          </div>
+
+          <div class="card reveal">
+            <div class="card-tag">Human–Machine Interface</div>
+            <h3 class="card-title">EMG Gesture Mouse Control</h3>
+            <p class="card-body">Real-time mouse clicks from EMG gestures captured with an Arduino UNO,
+              classified with XGBoost and interfaced through Python.</p>
+            <div class="card-tech"><span>EMG</span><span>Arduino</span><span>XGBoost</span><span>Real-time</span></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> Abdul Aleem Shaik Gadda · Rochester, NY</span>
+      <span><a href="index.html">← Home</a> ·
+        <a href="assets/resume.pdf">CV</a></span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
