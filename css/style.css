@@ -4,8 +4,8 @@
   --bg-alt: #f7f7f5;
   --text: #16161a;
   --text-soft: #55555c;
-  --accent: #275efe;
-  --accent-soft: #e7edff;
+  --accent: #f76902;
+  --accent-soft: #fdeee0;
   --border: #e6e6e3;
   --radius: 10px;
   --font: 'Inter', system-ui, -apple-system, sans-serif;
@@ -63,6 +63,29 @@ body {
   box-shadow: 0 12px 32px rgba(15,23,42,.12), 0 0 0 6px #fff, 0 0 0 7px var(--border);
   flex-shrink: 0;
 }
+.hero-avatar-wrap {
+  position: relative;
+  width: 180px; height: 180px;
+  flex-shrink: 0;
+  margin: 14px;
+}
+.affil-bubble {
+  position: absolute;
+  width: 46px; height: 46px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(15,23,42,.14);
+  padding: 9px;
+  z-index: 2;
+  transition: transform .2s ease;
+}
+.affil-bubble:hover { transform: scale(1.1); }
+.affil-bubble img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.affil-bubble:nth-of-type(1) { top: -14px; right: -14px; }
+.affil-bubble:nth-of-type(2) { top: -14px; left: -14px; }
+.affil-bubble:nth-of-type(3) { bottom: -14px; left: 50%; margin-left: -23px; }
 .hero-kicker {
   color: var(--accent); font-weight: 600; font-size: 0.85rem;
   text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 18px;
