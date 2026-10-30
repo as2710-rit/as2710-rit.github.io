@@ -12,8 +12,24 @@
     if (ok) ok.hidden = false;
   }
 
-  // Scroll-reveal
-  var els = document.querySelectorAll('.reveal');
+  // Scroll-reveal (with automatic stagger of sibling groups)
+  var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+
+  // Stagger: siblings that share a parent fade in one-by-one (Apple-style cascade).
+  var groups = {};
+  els.forEach(function (el) {
+    var parent = el.parentNode;
+    (groups[parent] = groups[parent] || []).push(el);
+  });
+  Object.keys(groups).forEach(function (key) {
+    var list = groups[key];
+    if (list.length > 1) {
+      list.forEach(function (el, i) {
+        el.style.setProperty('--reveal-delay', Math.min(i * 70, 420) + 'ms');
+      });
+    }
+  });
+
   if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     els.forEach(function (el) { el.classList.add('is-visible'); });
   } else {
@@ -21,7 +37,7 @@
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     els.forEach(function (el) { io.observe(el); });
   }
 
